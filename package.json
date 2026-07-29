@@ -31,7 +31,8 @@
     "dev": "tsc --watch"
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
