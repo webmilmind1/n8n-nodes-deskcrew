@@ -1,24 +1,23 @@
-# Publish to npm with provenance.
+# Publish to npm with provenance, via TRUSTED PUBLISHING (OIDC). No token.
 #
-# n8n's Creator Portal REFUSES packages published without provenance:
-#   "Submission blocked: this package version was not published with provenance."
-#
+# n8n's Creator Portal refuses any package version published without provenance.
 # Provenance is a signed attestation linking the tarball to the exact repo, workflow
-# and commit that produced it. npm will only issue one for a publish that happens
-# inside a public CI run it can verify, which is why publishing from a laptop can
-# never satisfy this no matter what flags you pass.
+# and commit that produced it, so npm only issues one for a publish inside a public
+# CI run it can verify. Publishing from a laptop cannot produce it, whatever flags
+# you pass.
 #
-# ⚠️ THIS FILE IS NOT AT ITS FINAL PATH. Copy its contents to
-# .github/workflows/publish.yml in the n8n-nodes-deskcrew repo via the GitHub web UI.
-# It cannot be pushed from here: the PAT in use lacks the `workflow` scope, so any
-# commit touching .github/workflows/* is rejected by GitHub.
+# WHY NO NPM_TOKEN. The package is configured on npmjs.com with this repo and this
+# workflow filename as a trusted publisher, so the job authenticates by exchanging a
+# short-lived OIDC token minted per run. There is no long-lived credential to leak,
+# expire, or rotate. npm is actively restricting 2FA-bypass tokens (account changes
+# Aug 2026, direct publishing Jan 2027), so a token-based workflow would need
+# replacing anyway.
 #
-# Requires one repository secret: NPM_TOKEN (an npm Automation token with publish
-# rights). Settings, then Secrets and variables, then Actions, then New repository
-# secret.
+# ⚠️ If you ever change this file's NAME, update the trusted publisher config on
+# npmjs.com to match. npm checks the workflow filename, so a rename breaks publishing
+# with an auth error that does not mention renaming.
 #
-# Actions minutes are free and unlimited on public repositories, so this costs
-# nothing even with the main private repo's allowance exhausted.
+# Actions minutes are free and unlimited on public repositories.
 
 name: Publish
 
@@ -31,9 +30,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      # The whole point: lets the job mint the OIDC token npm exchanges for a
-      # provenance attestation. Without it the publish succeeds but produces no
-      # provenance, and n8n rejects it exactly as before.
+      # Mints the OIDC token npm exchanges for both the publish auth and the
+      # provenance attestation. Without it the job cannot authenticate at all.
       id-token: write
       contents: read
     steps:
@@ -41,17 +39,26 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          # Provenance needs npm >= 9.5.0; Node 20 ships new enough.
-          node-version: 20
+          # Node 24, NOT 20. Two reasons, both learned the hard way:
+          # 1. npm@latest is now npm 12, which REFUSES to install on Node 20
+          #    ("notsup Required: node ^22.22.2 || ^24.15.0"). The job died here.
+          # 2. Node 20 ships npm 10, which predates trusted publishing entirely, so
+          #    even without the upgrade step OIDC auth would fail.
+          node-version: 24
           registry-url: https://registry.npmjs.org
+
+      # Node 24 ships npm 11, which already supports trusted publishing. This keeps
+      # it current anyway, and now succeeds because the engine requirement is met.
+      - run: npm install -g npm@latest
 
       - run: npm ci || npm install
 
-      # n8n's portal also warns that a node failing its starter checks is
-      # auto-rejected, so fail here rather than in their review queue.
+      # n8n auto-rejects a node that fails its starter checks, so fail here rather
+      # than in their review queue.
       - run: npm run build --if-present
       - run: npm test --if-present
 
+      # --provenance is implied by trusted publishing on a recent npm, but stating it
+      # makes the intent explicit and fails loudly if the setup is ever wrong, rather
+      # than silently publishing something n8n will reject.
       - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
