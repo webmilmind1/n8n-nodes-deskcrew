@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-deskcrew",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "n8n community node for DeskCrew: create and read support tickets, post replies, and publish knowledge-base and changelog entries.",
   "keywords": [
     "n8n-community-node-package",
@@ -15,6 +15,7 @@
   "homepage": "https://deskcrew.io",
   "author": {
     "name": "DeskCrew",
+    "email": "support@deskcrew.io",
     "url": "https://deskcrew.io"
   },
   "repository": {
@@ -39,7 +40,8 @@
     ],
     "nodes": [
       "dist/nodes/DeskCrew/DeskCrew.node.js"
-    ]
+    ],
+    "strict": true
   },
   "devDependencies": {
     "n8n-workflow": "^1.70.0",
@@ -47,5 +49,8 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/webmilmind1/n8n-nodes-deskcrew/issues"
   }
 }
