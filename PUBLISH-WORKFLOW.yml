@@ -1,0 +1,57 @@
+# Publish to npm with provenance.
+#
+# n8n's Creator Portal REFUSES packages published without provenance:
+#   "Submission blocked: this package version was not published with provenance."
+#
+# Provenance is a signed attestation linking the tarball to the exact repo, workflow
+# and commit that produced it. npm will only issue one for a publish that happens
+# inside a public CI run it can verify, which is why publishing from a laptop can
+# never satisfy this no matter what flags you pass.
+#
+# ⚠️ THIS FILE IS NOT AT ITS FINAL PATH. Copy its contents to
+# .github/workflows/publish.yml in the n8n-nodes-deskcrew repo via the GitHub web UI.
+# It cannot be pushed from here: the PAT in use lacks the `workflow` scope, so any
+# commit touching .github/workflows/* is rejected by GitHub.
+#
+# Requires one repository secret: NPM_TOKEN (an npm Automation token with publish
+# rights). Settings, then Secrets and variables, then Actions, then New repository
+# secret.
+#
+# Actions minutes are free and unlimited on public repositories, so this costs
+# nothing even with the main private repo's allowance exhausted.
+
+name: Publish
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      # The whole point: lets the job mint the OIDC token npm exchanges for a
+      # provenance attestation. Without it the publish succeeds but produces no
+      # provenance, and n8n rejects it exactly as before.
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Provenance needs npm >= 9.5.0; Node 20 ships new enough.
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci || npm install
+
+      # n8n's portal also warns that a node failing its starter checks is
+      # auto-rejected, so fail here rather than in their review queue.
+      - run: npm run build --if-present
+      - run: npm test --if-present
+
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
