@@ -1,0 +1,49 @@
+{
+  "node": "n8n-nodes-deskcrew.deskCrew",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": ["Communication", "Productivity"],
+  "alias": [
+    "helpdesk",
+    "help desk",
+    "service desk",
+    "support",
+    "customer support",
+    "customer service",
+    "ticket",
+    "tickets",
+    "ticketing",
+    "ticketing system",
+    "support ticket",
+    "issue tracker",
+    "live chat",
+    "chat",
+    "chat widget",
+    "knowledge base",
+    "kb",
+    "faq",
+    "docs",
+    "changelog",
+    "release notes",
+    "roadmap",
+    "csat",
+    "customer feedback",
+    "ai support",
+    "ai helpdesk",
+    "ai chat",
+    "ai agent",
+    "support automation",
+    "inbox",
+    "contact form"
+  ],
+  "subcategories": {
+    "Communication": ["Customer Support"]
+  },
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://deskcrew.io/integrations/n8n"
+      }
+    ]
+  }
+}

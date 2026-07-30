@@ -5,7 +5,11 @@ export class DeskCrew implements INodeType {
   description: INodeTypeDescription = {
     displayName: 'DeskCrew',
     name: 'deskCrew',
-    icon: 'file:deskcrew.svg',
+    // Lets an n8n AI Agent call this node directly as a tool, which is the whole point
+    // of an agent-native helpdesk: the agent opens and answers tickets itself.
+    usableAsTool: true,
+    // Same asset for both themes: the mark is a filled squircle with its own background.
+    icon: { light: 'file:deskcrew.svg', dark: 'file:deskcrew.svg' },
     group: ['output'],
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',

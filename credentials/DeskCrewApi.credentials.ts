@@ -1,4 +1,5 @@
 import type {
+  Icon,
   IAuthenticateGeneric,
   ICredentialTestRequest,
   ICredentialType,
@@ -8,6 +9,9 @@ import type {
 export class DeskCrewApi implements ICredentialType {
   name = 'deskCrewApi'
   displayName = 'DeskCrew API'
+  // Both themes point at the same asset deliberately: the mark is a filled squircle
+  // carrying its own background, so it reads correctly on light and dark alike.
+  icon: Icon = { light: 'file:deskcrew.svg', dark: 'file:deskcrew.svg' }
   documentationUrl = 'https://deskcrew.io'
   properties: INodeProperties[] = [
     {
