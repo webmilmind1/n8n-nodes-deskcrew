@@ -8,8 +8,9 @@ export class DeskCrew implements INodeType {
     // Lets an n8n AI Agent call this node directly as a tool, which is the whole point
     // of an agent-native helpdesk: the agent opens and answers tickets itself.
     usableAsTool: true,
-    // Same asset for both themes: the mark is a filled squircle with its own background.
-    icon: { light: 'file:deskcrew.svg', dark: 'file:deskcrew.svg' },
+    // Distinct assets: the dark variant lightens the gradient and darkens the glyph so
+    // the mark keeps its contrast on a dark canvas. n8n's linter rejects sharing one file.
+    icon: { light: 'file:deskcrew.svg', dark: 'file:deskcrew.dark.svg' },
     group: ['output'],
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',

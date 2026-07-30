@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-deskcrew",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "n8n community node for DeskCrew, the AI helpdesk: create and read support tickets, post replies, run live chat handoffs, and publish knowledge-base and changelog entries. Usable as an AI Agent tool.",
   "keywords": [
     "n8n-community-node-package",
@@ -42,7 +42,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "build": "tsc && mkdir -p dist/nodes/DeskCrew dist/credentials && cp nodes/DeskCrew/deskcrew.svg dist/nodes/DeskCrew/ && cp nodes/DeskCrew/DeskCrew.node.json dist/nodes/DeskCrew/ && cp credentials/deskcrew.svg dist/credentials/",
+    "build": "tsc && mkdir -p dist/nodes/DeskCrew dist/credentials && cp nodes/DeskCrew/deskcrew.svg nodes/DeskCrew/deskcrew.dark.svg dist/nodes/DeskCrew/ && cp nodes/DeskCrew/DeskCrew.node.json dist/nodes/DeskCrew/ && cp credentials/deskcrew.svg credentials/deskcrew.dark.svg dist/credentials/",
     "dev": "tsc --watch"
   },
   "files": [

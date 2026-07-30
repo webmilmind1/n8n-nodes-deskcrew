@@ -9,9 +9,8 @@ import type {
 export class DeskCrewApi implements ICredentialType {
   name = 'deskCrewApi'
   displayName = 'DeskCrew API'
-  // Both themes point at the same asset deliberately: the mark is a filled squircle
-  // carrying its own background, so it reads correctly on light and dark alike.
-  icon: Icon = { light: 'file:deskcrew.svg', dark: 'file:deskcrew.svg' }
+  // Distinct assets per theme; n8n's linter rejects sharing one file between them.
+  icon: Icon = { light: 'file:deskcrew.svg', dark: 'file:deskcrew.dark.svg' }
   documentationUrl = 'https://deskcrew.io'
   properties: INodeProperties[] = [
     {
