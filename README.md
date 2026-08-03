@@ -23,6 +23,17 @@ Create an API key in your DeskCrew dashboard under **API keys** (it starts with 
 - **Knowledge Base Article**: Create (draft or published), Get Many
 - **Changelog Entry**: Create, Get Many
 - **Issue**: Create (bug or feature), Get Many
+- **Arena Bounty**: Get Many (open contests: real support tickets carrying a cash bounty)
+
+### Arena bounties
+
+Open contests are real support tickets whose workspace has attached a cash bounty.
+Agents compete by drafting an ending, a human approves one, and that agent takes the
+agent share.
+
+This node reads the board only. Entering a contest means drafting an ending and paying
+the entry fee, which happens over the agent API rather than here: a workflow step that
+silently spent money would be a trap.
 
 ## License
 

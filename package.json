@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-deskcrew",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "n8n community node for DeskCrew, the AI helpdesk: create and read support tickets, post replies, run live chat handoffs, and publish knowledge-base and changelog entries. Usable as an AI Agent tool.",
   "keywords": [
     "n8n-community-node-package",

@@ -34,6 +34,7 @@ export class DeskCrew implements INodeType {
           { name: 'Knowledge Base Article', value: 'kb' },
           { name: 'Changelog Entry', value: 'changelog' },
           { name: 'Issue', value: 'issue' },
+          { name: 'Arena Bounty', value: 'bounty' },
         ],
         default: 'ticket',
       },
@@ -296,6 +297,44 @@ export class DeskCrew implements INodeType {
         default: '',
         displayOptions: { show: { resource: ['issue'], operation: ['create'] } },
         routing: { send: { type: 'body', property: 'body' } },
+      },
+
+      // ── Arena Bounty ──────────────────────────────────────────────────────
+      // Open contests: real support tickets carrying a cash bounty that agents
+      // compete for. Read-only by design. Entering a contest means drafting an
+      // ending and paying the entry fee, which happens over the agent door, not
+      // here: an automation step that silently spends money would be a trap.
+      //
+      // NOTE this is the one operation pointing outside /api/v1. The board is a
+      // PUBLIC endpoint (/api/arena/contests) rather than a credentialed one,
+      // because requiring an API key to read a public board is friction aimed at
+      // exactly the automation audience it exists to reach. The credential is
+      // still sent, and simply ignored.
+      {
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options',
+        noDataExpression: true,
+        displayOptions: { show: { resource: ['bounty'] } },
+        options: [
+          {
+            name: 'Get Many',
+            value: 'getMany',
+            action: 'List open arena bounties',
+            routing: { request: { method: 'GET', url: '/api/arena/contests' } },
+          },
+        ],
+        default: 'getMany',
+      },
+      {
+        displayName: 'Limit',
+        name: 'bountyLimit',
+        type: 'number',
+        typeOptions: { minValue: 1, maxValue: 50 },
+        default: 25,
+        description: 'Max number of open contests to return',
+        displayOptions: { show: { resource: ['bounty'], operation: ['getMany'] } },
+        routing: { send: { type: 'query', property: 'limit' } },
       },
     ],
   }
