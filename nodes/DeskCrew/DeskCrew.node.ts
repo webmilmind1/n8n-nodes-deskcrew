@@ -14,7 +14,8 @@ export class DeskCrew implements INodeType {
     group: ['output'],
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-    description: 'Work a DeskCrew support desk: tickets, replies, knowledge base, changelog, issues',
+    description:
+      'Work a DeskCrew support desk: tickets, replies, knowledge base, changelog, issues',
     defaults: { name: 'DeskCrew' },
     inputs: ['main' as NodeConnectionType],
     outputs: ['main' as NodeConnectionType],
@@ -60,7 +61,9 @@ export class DeskCrew implements INodeType {
             name: 'Get',
             value: 'get',
             action: 'Get a ticket',
-            routing: { request: { method: 'GET', url: '=/api/v1/tickets/{{$parameter.ticketId}}' } },
+            routing: {
+              request: { method: 'GET', url: '=/api/v1/tickets/{{$parameter.ticketId}}' },
+            },
           },
           {
             name: 'Get Many',
