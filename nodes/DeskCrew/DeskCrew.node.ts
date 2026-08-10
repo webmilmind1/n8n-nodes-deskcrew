@@ -29,12 +29,15 @@ export class DeskCrew implements INodeType {
         name: 'resource',
         type: 'options',
         noDataExpression: true,
+        // Alphabetical by display name: the n8n linter enforces it
+        // (node-param-options-type-unsorted-items), and the editor renders
+        // this list in source order, so sorted here IS sorted for the user.
         options: [
-          { name: 'Ticket', value: 'ticket' },
-          { name: 'Knowledge Base Article', value: 'kb' },
+          { name: 'Arena Bounty', value: 'bounty' },
           { name: 'Changelog Entry', value: 'changelog' },
           { name: 'Issue', value: 'issue' },
-          { name: 'Arena Bounty', value: 'bounty' },
+          { name: 'Knowledge Base Article', value: 'kb' },
+          { name: 'Ticket', value: 'ticket' },
         ],
         default: 'ticket',
       },
